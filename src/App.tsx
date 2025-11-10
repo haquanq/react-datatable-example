@@ -7,7 +7,8 @@ export const App = () => {
         <div className="flex max-w-160 flex-col gap-4 text-center">
           <h1 className="text-4xl font-bold text-gray-900">React DataTable Example</h1>
           <p className="text-base text-gray-600">
-            Click on headers to sort the table, maximum sorting 3 columns at once (compared by recently active column).
+            Click on header menus to sort the table, maximum sorting 3 columns at once (compared by most recently sorted
+            column).
           </p>
         </div>
         <CandidateManager />
