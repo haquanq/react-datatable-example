@@ -23,7 +23,7 @@ export const CandidateDelete = ({ candidate }: CandidateDeleteProps) => {
       open={open}
       onOpenChange={setOpen}
       title="Delete candidate"
-      description={`Are you sure you want to delete this candidate (${candidate.name} - ${candidate.email})? This action cannot be undone.`}
+      description={`Are you sure you want to delete this candidate (${candidate?.name} - ${candidate?.email})? This action cannot be undone.`}
       trigger={
         <button
           className="text-red-700 transition-opacity hover:opacity-50"
