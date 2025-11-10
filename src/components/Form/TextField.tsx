@@ -8,9 +8,10 @@ interface TextFieldProps {
   rules?: RegisterOptions;
   placeholder?: string;
   type?: "text" | "email" | "password";
+  autoComplete?: React.HTMLInputAutoCompleteAttribute;
 }
 
-export const TextField = ({ placeholder, label, name, rules, type = "text" }: TextFieldProps) => {
+export const TextField = ({ placeholder, label, name, rules, type = "text", autoComplete }: TextFieldProps) => {
   const inputId = useId();
   const inputHintId = useId();
 
@@ -37,8 +38,9 @@ export const TextField = ({ placeholder, label, name, rules, type = "text" }: Te
         aria-describedby={inputHintId}
         placeholder={placeholder}
         {...register(name, rules)}
+        autoComplete={autoComplete}
       />
-      <p className={cn("hidden text-sm", hasError && "block text-red-700")} id={inputHintId}>
+      <p className="text-sm text-red-700" id={inputHintId} style={{ display: hasError ? "block" : "none" }}>
         {errors[name]?.message as string}
       </p>
     </div>

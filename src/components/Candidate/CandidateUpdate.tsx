@@ -40,6 +40,7 @@ export const CandidateUpdate = ({ candidate }: CandidateUpdateProps) => {
           <TextField
             label="Name"
             name="name"
+            autoComplete="name"
             rules={{
               required: "Name is required",
               minLength: { value: 1, message: "Name must be between 1 and 100 characters" },
@@ -72,6 +73,7 @@ export const CandidateUpdate = ({ candidate }: CandidateUpdateProps) => {
             label="Email"
             name="email"
             type="email"
+            autoComplete="email"
             rules={{
               required: "Email is required",
               pattern: {
@@ -83,6 +85,7 @@ export const CandidateUpdate = ({ candidate }: CandidateUpdateProps) => {
           <TextField
             label="Address"
             name="address"
+            autoComplete="street-address"
             rules={{
               maxLength: { value: 200, message: "Address cannot be longer than 200 characters" },
             }}
