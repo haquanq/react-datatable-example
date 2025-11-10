@@ -22,9 +22,15 @@ export const TableHead = ({ disabled, index, className, children, ...restProps }
   };
 
   return (
-    <th className={cn("text-start font-medium tracking-wide text-gray-900", className)} {...restProps}>
+    <th
+      className={cn(
+        "text-start font-medium tracking-wide text-gray-900 *:rounded-none first:*:rounded-tl-md last:*:rounded-tr-md",
+        className,
+      )}
+      {...restProps}
+    >
       <button
-        className="flex h-full w-full justify-between gap-1 bg-gray-100 py-2 pr-3 pl-4 transition-colors hover:bg-gray-100/50"
+        className="flex h-full w-full justify-between gap-1 bg-gray-100 py-2 pr-3 pl-4 transition-colors hover:bg-gray-100/50 focus-visible:outline-2 focus-visible:-outline-offset-2"
         type="button"
         aria-label="Sort"
         disabled={disabled}
