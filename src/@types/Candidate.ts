@@ -1,7 +1,7 @@
 import type { Genders } from "./Genders";
 
 export type Candidate = {
-    id: string;
+    id: number;
     name: string;
     dateOfBirth: Date;
     gender: Genders;
