@@ -24,8 +24,7 @@ export const DataTable = ({ data, headers, dataColumnClass, headColumnClass, cla
 
     setSortingColumns((prev) => {
       if (position !== -1) {
-        prev[position] = sortingColumn;
-        return [...prev];
+        prev.splice(position, 1);
       }
       return [sortingColumn, ...prev].slice(0, 3);
     });
