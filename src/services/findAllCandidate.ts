@@ -6,7 +6,7 @@ export const findAllCandidate = (): Candidate[] => {
     const gender = faker.helpers.arrayElement(Object.values(GENDERS));
 
     return Array.from(
-        { length: 500 },
+        { length: 10 },
         (_, index) =>
             ({
                 id: index,
