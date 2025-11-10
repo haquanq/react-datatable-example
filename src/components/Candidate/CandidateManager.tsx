@@ -22,12 +22,37 @@ export const CandidateManager = () => {
       <DataTable
         aria-labelledby={tableLabelId}
         data={candidates}
-        headers={["ID", "Name", "Birth", "Gender", "Email", "Address"]}
-        dataColumnClass={["", "", "", "capitalize"]}
-        rowActions={(row) => (
+        columnDefinitions={[
+          {
+            field: "id",
+            headerName: "ID",
+          },
+          {
+            field: "name",
+            headerName: "Name",
+          },
+          {
+            field: "dateOfBirth",
+            headerName: "Birth",
+          },
+          {
+            field: "gender",
+            headerName: "Gender",
+            columnClass: "capitalize",
+          },
+          {
+            field: "email",
+            headerName: "Email",
+          },
+          {
+            field: "address",
+            headerName: "Address",
+          },
+        ]}
+        rowActions={(value) => (
           <>
-            <CandidateUpdate candidate={row as Candidate} />
-            <CandidateDelete candidateId={row.id as number} />
+            <CandidateUpdate candidate={value as Candidate} />
+            <CandidateDelete candidateId={value.id as number} />
           </>
         )}
       />

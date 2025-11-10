@@ -7,24 +7,25 @@ import { DataTableHeadReset } from "./DataTableHeadReset";
 import { DataTableRow } from "./DataTableRow";
 
 type CommonValue = string | number | Date;
+type ColumnDefinition = {
+  field: string;
+  headerName?: string;
+  width?: number;
+  headerClass?: string;
+  columnClass?: string;
+};
 
-interface TableProps extends React.ComponentProps<"table"> {
-  data: Array<Record<string, CommonValue>>;
+interface TableProps<T extends Record<string, CommonValue> = Record<string, CommonValue>>
+  extends React.ComponentProps<"table"> {
+  data: Array<T>;
   headers?: string[];
   dataColumnClass?: string[];
   headColumnClass?: string[];
   rowActions?: (row: Record<string, CommonValue>) => React.ReactNode;
+  columnDefinitions: ColumnDefinition[];
 }
 
-export const DataTable = ({
-  data,
-  headers,
-  dataColumnClass,
-  headColumnClass,
-  className,
-  rowActions,
-  ...restProps
-}: TableProps) => {
+export const DataTable = ({ data, className, rowActions, columnDefinitions, ...restProps }: TableProps) => {
   const [sortingColumns, setSortingColumns] = useState<SortingColumn[]>([]);
 
   const addSortingColumn = (sortingColumn: SortingColumn) => {
@@ -41,8 +42,6 @@ export const DataTable = ({
   const clearSortingColumns = () => {
     setSortingColumns([]);
   };
-
-  const headerLabels: string[] = headers || Object.keys(data[0] || {});
 
   const formatValue = (value: CommonValue) => {
     if (value instanceof Date)
@@ -83,9 +82,9 @@ export const DataTable = ({
       >
         <thead>
           <DataTableRow>
-            {headerLabels.map((value, index) => (
-              <TableHead className={headColumnClass?.[index]} index={index} key={"tablehead" + index}>
-                {formatValue(value)}
+            {columnDefinitions.map((v, index) => (
+              <TableHead className={cn("capitalize", v.headerClass)} index={index} key={"tablehead" + index}>
+                {v.headerName ?? v.field}
               </TableHead>
             ))}
             <DataTableHeadReset />
@@ -94,9 +93,9 @@ export const DataTable = ({
         <tbody className="divide divide-y divide-gray-200">
           {sortedData.map((row, index) => (
             <DataTableRow key={"tablerow" + index}>
-              {Object.values(row).map((value, index) => (
-                <DataTableCell className={dataColumnClass?.[index]} key={"tabledata" + value}>
-                  {formatValue(value)}
+              {columnDefinitions.map((v, index) => (
+                <DataTableCell className={v.columnClass} key={"tabledata" + v + index}>
+                  {formatValue(row[v.field])}
                 </DataTableCell>
               ))}
               {rowActions && <DataTableCell className="flex h-full gap-2">{rowActions(row)}</DataTableCell>}
