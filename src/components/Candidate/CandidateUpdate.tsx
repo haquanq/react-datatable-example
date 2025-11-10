@@ -1,5 +1,6 @@
 import type { Candidate } from "@/@types/Candidate";
 import type { CandidateUpdateDto } from "@/@types/CandidateUpdateDto";
+import { GENDERS } from "@/constants/Genders";
 import { useCandidateStore } from "@/stores/candidateStore";
 import { EditIcon } from "lucide-react";
 import { useState } from "react";
@@ -7,8 +8,8 @@ import { Button } from "../common/Button";
 import BaseDialog from "../Dialog/BaseDialog";
 import { DateField } from "../Form/DateField";
 import { FormControl } from "../Form/FormControl";
+import SelectField from "../Form/SelectField";
 import { TextField } from "../Form/TextField";
-import CandidateGenderSelect from "./CandidateGenderSelect";
 
 interface CandidateUpdateProps {
   candidate: Candidate;
@@ -46,7 +47,13 @@ export const CandidateUpdate = ({ candidate }: CandidateUpdateProps) => {
             }}
           />
           <div className="grid grid-cols-2 gap-3">
-            <CandidateGenderSelect name="gender" label="Gender" rules={{ required: "Gender is required" }} />
+            <SelectField
+              name="gender"
+              label="Gender"
+              rules={{ required: "Gender is required" }}
+              items={Object.values(GENDERS)}
+              defaultValue={GENDERS.MALE}
+            />
             <DateField
               label="Date of birth"
               name="dateOfBirth"

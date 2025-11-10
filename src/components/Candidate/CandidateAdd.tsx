@@ -1,4 +1,5 @@
 import type { CandidateCreateDto } from "@/@types/CandidateCreateDto";
+import { GENDERS } from "@/constants/Genders";
 import { useCandidateStore } from "@/stores/candidateStore";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
@@ -6,8 +7,8 @@ import { Button } from "../common/Button";
 import BaseDialog from "../Dialog/BaseDialog";
 import { DateField } from "../Form/DateField";
 import { FormControl } from "../Form/FormControl";
+import SelectField from "../Form/SelectField";
 import { TextField } from "../Form/TextField";
-import CandidateGenderSelect from "./CandidateGenderSelect";
 
 export const CandidateAdd = () => {
   const [open, setOpen] = useState(false);
@@ -42,7 +43,13 @@ export const CandidateAdd = () => {
             }}
           />
           <div className="grid grid-cols-2 gap-3">
-            <CandidateGenderSelect name="gender" label="Gender" rules={{ required: "Gender is required" }} />
+            <SelectField
+              name="gender"
+              label="Gender"
+              rules={{ required: "Gender is required" }}
+              items={Object.values(GENDERS)}
+              defaultValue={GENDERS.MALE}
+            />
             <DateField
               label="Date of birth"
               name="dateOfBirth"
