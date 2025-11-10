@@ -1,6 +1,6 @@
 import { cn } from "@/utils/cn";
 import { useId } from "react";
-import { type RegisterOptions, useFormContext } from "react-hook-form";
+import { type RegisterOptions, useController, useFormContext } from "react-hook-form";
 
 interface DateFieldProps {
   label: string;
@@ -14,9 +14,16 @@ export const DateField = ({ label, name, rules, value }: DateFieldProps) => {
   const inputHintId = useId();
 
   const {
-    register,
+    control,
     formState: { errors },
   } = useFormContext();
+
+  const { field } = useController({
+    name,
+    control,
+    rules,
+    defaultValue: value,
+  });
 
   const hasError = !!errors[name];
 
@@ -32,10 +39,10 @@ export const DateField = ({ label, name, rules, value }: DateFieldProps) => {
         )}
         id={inputId}
         type="date"
-        value={value?.toISOString().substring(0, 10)}
+        {...field}
+        value={new Date(field.value).toISOString().substring(0, 10)}
         aria-invalid={hasError}
         aria-describedby={inputHintId}
-        {...register(name, rules)}
       />
       <p className={cn("hidden text-sm", hasError && "block text-red-700")} id={inputHintId}>
         {errors[name]?.message as string}
