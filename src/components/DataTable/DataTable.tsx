@@ -1,9 +1,8 @@
 import { cn } from "@/utils/cn";
 import { useState } from "react";
-import { SORT_ORDERS, TableContext, type SortingColumn } from "./context";
-import { DataTableCell } from "./DataTableCell";
-import { TableHead } from "./DataTableHead";
-import { DataTableHeadReset } from "./DataTableHeadReset";
+import { DataTableContext, SORT_ORDERS, type SortingColumn } from "./context";
+import { DataTableColumnCell } from "./DataTableColumnCell";
+import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { DataTableRow } from "./DataTableRow";
 
 type CommonValue = string | number | Date;
@@ -72,37 +71,40 @@ export const DataTable = ({ data, className, rowActions, columnDefinitions, ...r
   if (data.length === 0) return null;
 
   return (
-    <TableContext.Provider value={{ addSortingColumn, sortingColumns, clearSortingColumns }}>
+    <DataTableContext.Provider value={{ addSortingColumn, sortingColumns, clearSortingColumns }}>
       <table
         className={cn(
-          "divide divide-y divide-gray-200 rounded-md bg-gray-50/50 text-sm outline -outline-offset-1 outline-gray-200",
+          "divide divide-y divide-gray-200 overflow-hidden rounded-md text-sm outline -outline-offset-1 outline-gray-200",
           className,
         )}
         {...restProps}
       >
-        <thead>
+        <thead className="rounded-t-md bg-gray-100">
           <DataTableRow>
             {columnDefinitions.map((v, index) => (
-              <TableHead className={cn("capitalize", v.headerClass)} index={index} key={"tablehead" + index}>
-                {v.headerName ?? v.field}
-              </TableHead>
+              <DataTableColumnHeader
+                className={cn("capitalize", v.headerClass)}
+                index={index}
+                key={"tablehead" + index}
+                label={v.headerName ?? v.field}
+              />
             ))}
-            <DataTableHeadReset />
+            <th className="bg-gray-100"></th>
           </DataTableRow>
         </thead>
         <tbody className="divide divide-y divide-gray-200">
           {sortedData.map((row, index) => (
             <DataTableRow key={"tablerow" + index}>
               {columnDefinitions.map((v, index) => (
-                <DataTableCell className={v.columnClass} key={"tabledata" + v + index}>
+                <DataTableColumnCell className={v.columnClass} key={"tabledata" + v + index}>
                   {formatValue(row[v.field])}
-                </DataTableCell>
+                </DataTableColumnCell>
               ))}
-              {rowActions && <DataTableCell className="flex h-full gap-2">{rowActions(row)}</DataTableCell>}
+              {rowActions && <DataTableColumnCell className="flex h-full gap-2">{rowActions(row)}</DataTableColumnCell>}
             </DataTableRow>
           ))}
         </tbody>
       </table>
-    </TableContext.Provider>
+    </DataTableContext.Provider>
   );
 };

@@ -26,10 +26,4 @@ const dataTableContextInitialData: DataTableContextData = {
 
 const DataTableContext = createContext<DataTableContextData>(dataTableContextInitialData);
 
-export {
-    SORT_ORDERS,
-    DataTableContext as TableContext,
-    type SortingColumn,
-    type SortOrders,
-    type DataTableContextData as TableContextData,
-};
+export { DataTableContext, SORT_ORDERS, type DataTableContextData, type SortingColumn, type SortOrders };
