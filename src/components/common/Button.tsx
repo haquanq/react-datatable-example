@@ -1,10 +1,18 @@
 import { cn } from "@/utils/cn";
 
-export const Button = ({ className, children, ...restProps }: React.ComponentProps<"button">) => {
+interface ButtonProps extends React.ComponentProps<"button"> {
+  variant?: "primary" | "secondary";
+}
+
+export const Button = ({ className, variant = "primary", children, ...restProps }: ButtonProps) => {
   return (
     <button
       className={cn(
-        "flex h-10 items-center justify-center gap-2 rounded-md border-2 border-gray-900 bg-gray-900 px-4 font-medium text-gray-50 transition-colors hover:bg-white hover:text-gray-900",
+        "flex h-10 items-center justify-center gap-2 rounded-md border px-4 font-medium transition-colors",
+        {
+          "border-gray-900 bg-gray-900 text-gray-50 hover:bg-white hover:text-gray-900": variant === "primary",
+          "border-gray-200 bg-gray-50 text-gray-900 hover:border-gray-900": variant === "secondary",
+        },
         className,
       )}
       {...restProps}
