@@ -3,7 +3,7 @@ import { useCandidateStore } from "@/stores/candidateStore";
 import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../common/Button";
-import BaseDialog from "../Dialog/BaseDialog";
+import { BaseDialog } from "../Dialog";
 
 interface CandidateDeleteProps {
   candidate: Candidate;

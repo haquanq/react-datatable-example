@@ -12,7 +12,7 @@ interface SelectFieldProps {
   defaultValue?: string;
 }
 
-export default function SelectField({ name, label, rules, items, defaultValue }: SelectFieldProps) {
+export const SelectField = ({ name, label, rules, items, defaultValue }: SelectFieldProps) => {
   const inputId = React.useId();
   const inputHintId = React.useId();
 
@@ -75,4 +75,4 @@ export default function SelectField({ name, label, rules, items, defaultValue }:
       </p>
     </Combobox.Root>
   );
-}
+};

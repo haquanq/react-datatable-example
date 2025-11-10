@@ -4,11 +4,8 @@ import { useCandidateStore } from "@/stores/candidateStore";
 import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../common/Button";
-import BaseDialog from "../Dialog/BaseDialog";
-import { DateField } from "../Form/DateField";
-import { FormControl } from "../Form/FormControl";
-import SelectField from "../Form/SelectField";
-import { TextField } from "../Form/TextField";
+import { BaseDialog } from "../Dialog";
+import { DateField, FormControl, SelectField, TextField } from "../Form";
 
 export const CandidateAdd = () => {
   const [open, setOpen] = useState(false);
