@@ -1,0 +1,91 @@
+import type { CandidateCreateDto } from "@/@types/CandidateCreateDto";
+import { useCandidateStore } from "@/stores/candidateStore";
+import { PlusIcon } from "lucide-react";
+import { useState } from "react";
+import { Button } from "../common/Button";
+import BaseDialog from "../Dialog/BaseDialog";
+import { DateField } from "../Form/DateField";
+import { FormControl } from "../Form/FormControl";
+import { TextField } from "../Form/TextField";
+import CandidateGenderSelect from "./CandidateGenderSelect";
+
+export const CandidateAdd = () => {
+  const [open, setOpen] = useState(false);
+  const addCandidate = useCandidateStore((state) => state.addCandidate);
+
+  const onSubmit = (data: CandidateCreateDto) => {
+    addCandidate(data);
+    setOpen(false);
+  };
+
+  return (
+    <BaseDialog
+      open={open}
+      onOpenChange={setOpen}
+      title="Add candidate"
+      trigger={
+        <Button type="button" onClick={() => setOpen(true)}>
+          Add candidate
+          <PlusIcon />
+        </Button>
+      }
+    >
+      <FormControl<CandidateCreateDto> className="w-100 pt-4" onSubmit={onSubmit}>
+        <>
+          <TextField
+            label="Name"
+            name="name"
+            rules={{
+              required: "Name is required",
+              minLength: { value: 1, message: "Name must be between 1 and 100 characters" },
+              maxLength: { value: 100, message: "Name must be between 1 and 100 characters" },
+            }}
+          />
+          <div className="grid grid-cols-2 gap-3">
+            <CandidateGenderSelect name="gender" label="Gender" rules={{ required: "Gender is required" }} />
+            <DateField
+              label="Date of birth"
+              name="dateOfBirth"
+              rules={{
+                required: "Date of birth is required",
+                validate: {
+                  notInFuture: (value) => new Date(value) <= new Date() || "Date of birth cannot be in the future",
+                  notTooOld: (value) =>
+                    new Date().getFullYear() - new Date(value).getFullYear() <= 100 || "Age cannot be more than 100",
+                },
+              }}
+            />
+          </div>
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            rules={{
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email address",
+              },
+            }}
+          />
+          <TextField
+            label="Address"
+            name="address"
+            rules={{
+              maxLength: { value: 200, message: "Address cannot be longer than 200 characters" },
+            }}
+          />
+          <div className="flex justify-end gap-3 pt-4">
+            <Button type="submit">
+              Add
+              <PlusIcon size={20} />
+            </Button>
+            <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+          </div>
+        </>
+      </FormControl>
+    </BaseDialog>
+  );
+};

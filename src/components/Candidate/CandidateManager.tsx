@@ -1,0 +1,36 @@
+import type { Candidate } from "@/@types/Candidate";
+import { useCandidateStore } from "@/stores/candidateStore";
+import { useId } from "react";
+import { DataTable } from "../DataTable";
+import { CandidateAdd } from "./CandidateAdd";
+import { CandidateDelete } from "./CandidateDelete";
+import { CandidateUpdate } from "./CandidateUpdate";
+
+export const CandidateManager = () => {
+  const tableLabelId = useId();
+  const { candidates } = useCandidateStore();
+
+  return (
+    <section className="flex w-full flex-col items-center gap-8 overflow-hidden pt-6">
+      <h2 className="sr-only" id={tableLabelId}>
+        Fake candidates
+      </h2>
+      <div className="flex justify-center">
+        <CandidateAdd />
+      </div>
+
+      <DataTable
+        aria-labelledby={tableLabelId}
+        data={candidates}
+        headers={["ID", "Name", "Birth", "Gender", "Email", "Address"]}
+        dataColumnClass={["", "", "", "capitalize"]}
+        rowActions={(row) => (
+          <>
+            <CandidateUpdate candidate={row as Candidate} />
+            <CandidateDelete candidateId={row.id as number} />
+          </>
+        )}
+      />
+    </section>
+  );
+};
