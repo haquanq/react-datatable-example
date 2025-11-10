@@ -25,7 +25,12 @@ export const CandidateDelete = ({ candidate }: CandidateDeleteProps) => {
       title="Delete candidate"
       description={`Are you sure you want to delete this candidate (${candidate.name} - ${candidate.email})? This action cannot be undone.`}
       trigger={
-        <button className="text-red-700" onClick={() => setOpen(true)} aria-label="Delete" type="button">
+        <button
+          className="text-red-700 transition-opacity hover:opacity-50"
+          onClick={() => setOpen(true)}
+          aria-label="Delete"
+          type="button"
+        >
           <Trash2Icon size={20} />
         </button>
       }

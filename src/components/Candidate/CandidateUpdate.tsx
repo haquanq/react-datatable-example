@@ -27,7 +27,7 @@ export const CandidateUpdate = ({ candidate }: CandidateUpdateProps) => {
       onOpenChange={setOpen}
       title="Update candidate"
       trigger={
-        <button type="button" onClick={() => setOpen(true)}>
+        <button className="transition-opacity hover:opacity-50" type="button" onClick={() => setOpen(true)}>
           <EditIcon size={20} />
         </button>
       }
