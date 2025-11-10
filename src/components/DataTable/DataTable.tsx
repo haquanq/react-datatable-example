@@ -1,5 +1,4 @@
 import { cn } from "@/utils/cn";
-import { EditIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { SORT_ORDERS, TableContext, type SortingColumn } from "./context";
 import { DataTableCell } from "./DataTableCell";
@@ -14,9 +13,18 @@ interface TableProps extends React.ComponentProps<"table"> {
   headers?: string[];
   dataColumnClass?: string[];
   headColumnClass?: string[];
+  rowActions?: (row: Record<string, CommonValue>) => React.ReactNode;
 }
 
-export const DataTable = ({ data, headers, dataColumnClass, headColumnClass, className, ...restProps }: TableProps) => {
+export const DataTable = ({
+  data,
+  headers,
+  dataColumnClass,
+  headColumnClass,
+  className,
+  rowActions,
+  ...restProps
+}: TableProps) => {
   const [sortingColumns, setSortingColumns] = useState<SortingColumn[]>([]);
 
   const addSortingColumn = (sortingColumn: SortingColumn) => {
@@ -34,8 +42,7 @@ export const DataTable = ({ data, headers, dataColumnClass, headColumnClass, cla
     setSortingColumns([]);
   };
 
-  const headerLabels: string[] = headers || Object.keys(data[0]);
-  const flattenedData: Array<Array<CommonValue>> = data.map((v) => Object.values(v));
+  const headerLabels: string[] = headers || Object.keys(data[0] || {});
 
   const formatValue = (value: CommonValue) => {
     if (value instanceof Date)
@@ -53,9 +60,11 @@ export const DataTable = ({ data, headers, dataColumnClass, headColumnClass, cla
     return a - b;
   };
 
-  flattenedData.sort((a, b) => {
+  const sortedData = [...data].sort((a, b) => {
+    const aValues = Object.values(a);
+    const bValues = Object.values(b);
     for (const sortingColumn of sortingColumns) {
-      const d = compareTwoCommonValues(a[sortingColumn.index], b[sortingColumn.index]);
+      const d = compareTwoCommonValues(aValues[sortingColumn.index], bValues[sortingColumn.index]);
       if (d !== 0) return sortingColumn.order === SORT_ORDERS.ASCENDING ? -d : d;
     }
     return 0;
@@ -83,25 +92,14 @@ export const DataTable = ({ data, headers, dataColumnClass, headColumnClass, cla
           </DataTableRow>
         </thead>
         <tbody className="divide divide-y divide-gray-200">
-          {flattenedData.map((item, index) => (
+          {sortedData.map((row, index) => (
             <DataTableRow key={"tablerow" + index}>
-              {item.map((value, index) => (
+              {Object.values(row).map((value, index) => (
                 <DataTableCell className={dataColumnClass?.[index]} key={"tabledata" + value}>
                   {formatValue(value)}
                 </DataTableCell>
               ))}
-              <DataTableCell className="flex h-full gap-2 align-middle">
-                <button className="text-gray-900 transition-opacity hover:opacity-50" type="button" aria-label="Edit">
-                  <EditIcon size={20} />
-                </button>
-                <button
-                  className="text-[#a81c1c] transition-opacity hover:opacity-50"
-                  type="button"
-                  aria-label="Delete"
-                >
-                  <Trash2Icon size={20} />
-                </button>
-              </DataTableCell>
+              {rowActions && <DataTableCell className="flex h-full gap-2">{rowActions(row)}</DataTableCell>}
             </DataTableRow>
           ))}
         </tbody>
