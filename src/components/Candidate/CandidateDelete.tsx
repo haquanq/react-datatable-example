@@ -1,3 +1,4 @@
+import type { Candidate } from "@/@types/Candidate";
 import { useCandidateStore } from "@/stores/candidateStore";
 import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
@@ -5,15 +6,15 @@ import { Button } from "../common/Button";
 import BaseDialog from "../Dialog/BaseDialog";
 
 interface CandidateDeleteProps {
-  candidateId: number;
+  candidate: Candidate;
 }
 
-export const CandidateDelete = ({ candidateId }: CandidateDeleteProps) => {
+export const CandidateDelete = ({ candidate }: CandidateDeleteProps) => {
   const [open, setOpen] = useState(false);
   const removeCandidate = useCandidateStore((state) => state.deleteCandidate);
 
   const handleDelete = () => {
-    removeCandidate(candidateId);
+    removeCandidate(candidate.id);
     setOpen(false);
   };
 
@@ -22,7 +23,7 @@ export const CandidateDelete = ({ candidateId }: CandidateDeleteProps) => {
       open={open}
       onOpenChange={setOpen}
       title="Delete candidate"
-      description="Are you sure you want to delete this candidate? This action cannot be undone."
+      description={`Are you sure you want to delete this candidate (${candidate.name} - ${candidate.email})? This action cannot be undone.`}
       trigger={
         <button className="text-red-700" onClick={() => setOpen(true)} aria-label="Delete" type="button">
           <Trash2Icon size={20} />

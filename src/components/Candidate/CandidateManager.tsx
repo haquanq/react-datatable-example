@@ -52,7 +52,7 @@ export const CandidateManager = () => {
         rowActions={(value) => (
           <>
             <CandidateUpdate candidate={value as Candidate} />
-            <CandidateDelete candidateId={value.id as number} />
+            <CandidateDelete candidate={value as Candidate} />
           </>
         )}
       />
