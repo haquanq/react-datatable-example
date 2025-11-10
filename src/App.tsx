@@ -1,35 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { CandidateManager } from "./components/Candidate/CandidateManager";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main className="min-h-screen bg-white pt-20 pb-35">
+      <div className="mx-auto flex w-[min(100vw-3rem,69.375rem)] flex-col items-center">
+        <div className="flex max-w-160 flex-col gap-4 text-center">
+          <h1 className="text-4xl font-bold text-gray-900">React DataTable Example</h1>
+          <p className="text-base text-gray-600">
+            Click on headers to sort the table, maximum sorting 3 columns at once (compared by recently active column).
+          </p>
+        </div>
+        <CandidateManager />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
-
-export default App
+    </main>
+  );
+};
