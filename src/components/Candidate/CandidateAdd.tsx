@@ -53,6 +53,7 @@ export const CandidateAdd = () => {
             <DateField
               label="Date of birth"
               name="dateOfBirth"
+              value={new Date()}
               rules={{
                 required: "Date of birth is required",
                 validate: {
