@@ -9,7 +9,7 @@ interface BaseDialogProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export default function BaseDialog({ trigger, title, description, children, open, onOpenChange }: BaseDialogProps) {
+export const BaseDialog = ({ trigger, title, description, children, open, onOpenChange }: BaseDialogProps) => {
   return (
     <Dialog.Root modal="trap-focus" open={open} onOpenChange={onOpenChange}>
       {trigger && <Dialog.Trigger render={trigger} />}
@@ -25,4 +25,4 @@ export default function BaseDialog({ trigger, title, description, children, open
       </Dialog.Portal>
     </Dialog.Root>
   );
-}
+};
