@@ -26,6 +26,8 @@ export const CandidateManager = () => {
           {
             field: "id",
             headerName: "ID",
+            filterable: false,
+            sortable: false,
           },
           {
             field: "name",

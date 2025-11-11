@@ -12,8 +12,16 @@ interface DataTableHeadProps extends React.ComponentProps<"th"> {
 }
 
 export const DataTableColumnHeader = ({ columnIndex, className, columnLabel, ...restProps }: DataTableHeadProps) => {
-  const { sortingColumns } = useContext(DataTableContext);
+  const { sortingColumns, columnDefinitions } = useContext(DataTableContext);
   const sortingState = sortingColumns.find((v) => v.index === columnIndex);
+  const columnDefinition = columnDefinitions[columnIndex];
+
+  const isSorting = sortingState !== undefined;
+  const isSortingAscending = isSorting && sortingState.order === SORT_ORDERS.ASCENDING;
+  const isSortingDescending = isSorting && sortingState.order === SORT_ORDERS.DESCENDING;
+
+  const isSortable = [undefined, true].includes(columnDefinition.sortable);
+  const isFilterable = [undefined, true].includes(columnDefinition.filterable);
   return (
     <th
       className={cn(
@@ -25,14 +33,16 @@ export const DataTableColumnHeader = ({ columnIndex, className, columnLabel, ...
       <div className="flex items-center justify-between gap-4 py-3 pr-2 pl-3">
         <div className="flex items-center gap-2">
           <span>{columnLabel}</span>
-          <div className="*:size-5">
-            {sortingState && sortingState.order === SORT_ORDERS.ASCENDING && <ArrowUp strokeWidth={1.5} />}
-            {sortingState && sortingState.order === SORT_ORDERS.DESCENDING && <ArrowDown strokeWidth={1.5} />}
-          </div>
+          {isSorting && (
+            <div className="*:size-5">
+              {isSortingAscending && <ArrowUp strokeWidth={1.5} />}
+              {isSortingDescending && <ArrowDown strokeWidth={1.5} />}
+            </div>
+          )}
         </div>
         <div className="flex">
-          <DataTableColumnFilter columnIndex={columnIndex} />
-          <DataTableColumnSort index={columnIndex} />
+          {isFilterable && <DataTableColumnFilter columnIndex={columnIndex} />}
+          {isSortable && <DataTableColumnSort index={columnIndex} />}
         </div>
       </div>
     </th>

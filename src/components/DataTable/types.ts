@@ -18,6 +18,8 @@ type ColumnDefinition = {
     width?: number;
     headerClass?: string;
     columnClass?: string;
+    filterable?: boolean;
+    sortable?: boolean;
 };
 
 type CommonValue = string | number | Date;

@@ -95,7 +95,7 @@ export const DataTable = ({ data, className, rowActions, columnDefinitions, ...r
     >
       <div className="w-full overflow-x-scroll rounded-md border border-gray-200">
         <table
-          className={cn("divide divide-y divide-gray-200 overflow-hidden rounded-md text-sm", className)}
+          className={cn("divide w-full divide-y divide-gray-200 overflow-hidden rounded-md text-sm", className)}
           {...restProps}
         >
           <thead className="rounded-t-md bg-gray-100">
