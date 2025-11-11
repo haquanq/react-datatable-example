@@ -87,7 +87,7 @@ export const DataTableColumnFilter = ({ columnIndex }: DataTableColumnFilterProp
           <div className="pb-2">
             <CheckboxGroup
               aria-labelledby="apples-caption"
-              className="flex max-h-30 flex-col items-start gap-2 overflow-y-scroll px-3 pt-2"
+              className="flex max-h-30 flex-col items-start gap-2 overflow-y-auto px-3 pt-2"
             >
               {filteredItems.map((itemValue, itemIndex) => (
                 <label className="flex items-center gap-2" key={formatCommonValue(itemValue) + itemIndex}>

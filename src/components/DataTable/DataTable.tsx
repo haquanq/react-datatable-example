@@ -93,7 +93,7 @@ export const DataTable = ({ data, className, rowActions, columnDefinitions, ...r
         setFilteringColumnValues,
       }}
     >
-      <div className="w-full overflow-x-scroll rounded-md border border-gray-200">
+      <div className="w-full overflow-x-auto rounded-md border border-gray-200">
         <table
           className={cn("divide w-full divide-y divide-gray-200 overflow-hidden rounded-md text-sm", className)}
           {...restProps}
