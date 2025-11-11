@@ -28,8 +28,8 @@ export const CandidateAdd = () => {
         </Button>
       }
     >
-      <FormControl<CandidateCreateDto> className="w-100 pt-4" onSubmit={onSubmit}>
-        <>
+      <FormControl onSubmit={onSubmit}>
+        <div className="pt-6">
           <TextField
             label="Name"
             name="name"
@@ -40,7 +40,7 @@ export const CandidateAdd = () => {
               maxLength: { value: 100, message: "Name must be between 1 and 100 characters" },
             }}
           />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-3">
             <SelectField
               name="gender"
               label="Gender"
@@ -83,7 +83,7 @@ export const CandidateAdd = () => {
               maxLength: { value: 200, message: "Address cannot be longer than 200 characters" },
             }}
           />
-          <div className="flex justify-end gap-3 pt-4">
+          <div className="flex justify-end gap-3 pt-8">
             <Button type="submit">
               Add
               <PlusIcon size={20} />
@@ -92,7 +92,7 @@ export const CandidateAdd = () => {
               Cancel
             </Button>
           </div>
-        </>
+        </div>
       </FormControl>
     </BaseDialog>
   );
