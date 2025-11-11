@@ -1,17 +1,19 @@
 import { cn } from "@/utils/cn";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useContext } from "react";
-import { DataTableContext, SORT_ORDERS } from "./context";
+import { SORT_ORDERS } from "./constants";
+import { DataTableContext } from "./context";
+import { DataTableColumnFilter } from "./DataTableColumnFilter";
 import { DataTableColumnSort } from "./DataTableColumnSort";
 
 interface DataTableHeadProps extends React.ComponentProps<"th"> {
-  label: string;
-  index: number;
+  columnLabel: string;
+  columnIndex: number;
 }
 
-export const DataTableColumnHeader = ({ index, className, label, ...restProps }: DataTableHeadProps) => {
+export const DataTableColumnHeader = ({ columnIndex, className, columnLabel, ...restProps }: DataTableHeadProps) => {
   const { sortingColumns } = useContext(DataTableContext);
-  const sortingState = sortingColumns.find((v) => v.index === index);
+  const sortingState = sortingColumns.find((v) => v.index === columnIndex);
   return (
     <th
       className={cn(
@@ -22,14 +24,15 @@ export const DataTableColumnHeader = ({ index, className, label, ...restProps }:
     >
       <div className="flex items-center justify-between gap-4 py-3 pr-2 pl-3">
         <div className="flex items-center gap-2">
-          <span>{label}</span>
+          <span>{columnLabel}</span>
           <div className="*:size-5">
             {sortingState && sortingState.order === SORT_ORDERS.ASCENDING && <ArrowUp strokeWidth={1.5} />}
             {sortingState && sortingState.order === SORT_ORDERS.DESCENDING && <ArrowDown strokeWidth={1.5} />}
           </div>
         </div>
         <div className="flex">
-          <DataTableColumnSort index={index} />
+          <DataTableColumnFilter columnIndex={columnIndex} />
+          <DataTableColumnSort index={columnIndex} />
         </div>
       </div>
     </th>

@@ -1,7 +1,8 @@
 import { ArrowDownIcon, ArrowUpIcon, EllipsisVerticalIcon, RefreshCwIcon } from "lucide-react";
 import { useContext } from "react";
 import { BasePopover } from "../Dialog";
-import { DataTableContext, SORT_ORDERS } from "./context";
+import { SORT_ORDERS } from "./constants";
+import { DataTableContext } from "./context";
 
 interface DataTableColumnSortProps {
   index: number;

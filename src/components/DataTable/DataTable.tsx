@@ -1,18 +1,12 @@
 import { cn } from "@/utils/cn";
 import { useState } from "react";
-import { DataTableContext, SORT_ORDERS, type SortingColumn } from "./context";
+import { SORT_ORDERS } from "./constants";
+import { DataTableContext } from "./context";
 import { DataTableColumnCell } from "./DataTableColumnCell";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { DataTableRow } from "./DataTableRow";
-
-type CommonValue = string | number | Date;
-type ColumnDefinition = {
-  field: string;
-  headerName?: string;
-  width?: number;
-  headerClass?: string;
-  columnClass?: string;
-};
+import { compareTwoCommonValues, formatCommonValue } from "./helper";
+import { type ColumnDefinition, type CommonValue, type FilteringColumn, type SortingColumn } from "./types";
 
 interface TableProps<T extends Record<string, CommonValue> = Record<string, CommonValue>>
   extends React.ComponentProps<"table"> {
@@ -26,6 +20,9 @@ interface TableProps<T extends Record<string, CommonValue> = Record<string, Comm
 
 export const DataTable = ({ data, className, rowActions, columnDefinitions, ...restProps }: TableProps) => {
   const [sortingColumns, setSortingColumns] = useState<SortingColumn[]>([]);
+  const [filteringColumns, setFilteringColumns] = useState<FilteringColumn[]>(
+    data.map((_, index) => ({ index, values: new Set() })),
+  );
 
   const addSortingColumn = (sortingColumn: SortingColumn) => {
     const position = sortingColumns.findIndex((v) => v.index === sortingColumn.index);
@@ -42,20 +39,24 @@ export const DataTable = ({ data, className, rowActions, columnDefinitions, ...r
     setSortingColumns([]);
   };
 
-  const formatValue = (value: CommonValue) => {
-    if (value instanceof Date)
-      return value
-        .toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" })
-        .replaceAll("/", "-");
-    if (typeof value === "number") return value.toString();
-    return value;
+  const addFilteringColumnValue = (index: number, value: CommonValue) => {
+    setFilteringColumns((prev) =>
+      prev.map((v, i) => (i === index ? { ...v, values: new Set([...v.values, value]) } : v)),
+    );
   };
 
-  const compareTwoCommonValues = (a: CommonValue, b: CommonValue): number => {
-    if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
-    if (typeof a === "string" && typeof b === "string") return a.localeCompare(b);
-    ///@ts-expect-error a or b are not number
-    return a - b;
+  const removeFilteringColumnValue = (index: number, value: CommonValue) => {
+    setFilteringColumns((prev) =>
+      prev.map((v, i) => (i === index ? { ...v, values: new Set([...v.values].filter((v) => v !== value)) } : v)),
+    );
+  };
+
+  const clearFilteringColumnValues = (index: number) => {
+    setFilteringColumns((prev) => prev.map((v, i) => (i === index ? { ...v, values: new Set() } : v)));
+  };
+
+  const setFilteringColumnValues = (index: number, values: Set<CommonValue>) => {
+    setFilteringColumns((prev) => prev.map((v, i) => (i === index ? { ...v, values } : v)));
   };
 
   const sortedData = [...data].sort((a, b) => {
@@ -68,10 +69,30 @@ export const DataTable = ({ data, className, rowActions, columnDefinitions, ...r
     return 0;
   });
 
-  if (data.length === 0) return null;
+  const filteredAndSortedData = sortedData.filter((v) => {
+    for (const filteringColumn of filteringColumns) {
+      if (filteringColumn.values.size === 0) continue;
+      const target = v[columnDefinitions[filteringColumn.index].field];
+      if (!filteringColumn.values.has(target)) return false;
+    }
+    return true;
+  });
 
   return (
-    <DataTableContext.Provider value={{ addSortingColumn, sortingColumns, clearSortingColumns }}>
+    <DataTableContext.Provider
+      value={{
+        addSortingColumn,
+        sortingColumns,
+        clearSortingColumns,
+        data,
+        columnDefinitions,
+        filteringColumns,
+        addFilteringColumnValue,
+        clearFilteringColumnValues,
+        removeFilteringColumnValue,
+        setFilteringColumnValues,
+      }}
+    >
       <table
         className={cn(
           "divide divide-y divide-gray-200 overflow-hidden rounded-md text-sm outline -outline-offset-1 outline-gray-200",
@@ -84,20 +105,20 @@ export const DataTable = ({ data, className, rowActions, columnDefinitions, ...r
             {columnDefinitions.map((v, index) => (
               <DataTableColumnHeader
                 className={cn("capitalize", v.headerClass)}
-                index={index}
+                columnIndex={index}
                 key={"tablehead" + index}
-                label={v.headerName ?? v.field}
+                columnLabel={v.headerName ?? v.field}
               />
             ))}
             <th className="bg-gray-100"></th>
           </DataTableRow>
         </thead>
         <tbody className="divide divide-y divide-gray-200">
-          {sortedData.map((row, index) => (
+          {filteredAndSortedData.map((row, index) => (
             <DataTableRow key={"tablerow" + index}>
               {columnDefinitions.map((v, index) => (
                 <DataTableColumnCell className={v.columnClass} key={"tabledata" + v + index}>
-                  {formatValue(row[v.field])}
+                  {formatCommonValue(row[v.field])}
                 </DataTableColumnCell>
               ))}
               {rowActions && <DataTableColumnCell className="flex h-full gap-2">{rowActions(row)}</DataTableColumnCell>}

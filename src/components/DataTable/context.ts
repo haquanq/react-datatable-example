@@ -1,24 +1,27 @@
 import { createContext } from "react";
-
-const SORT_ORDERS = {
-    ASCENDING: "ascending",
-    DESCENDING: "descending",
-} as const;
-
-type SortOrders = (typeof SORT_ORDERS)[keyof typeof SORT_ORDERS];
-
-type SortingColumn = {
-    index: number;
-    order: SortOrders;
-};
+import type { ColumnDefinition, CommonValue, FilteringColumn, SortingColumn } from "./types";
 
 interface DataTableContextData {
+    data: Array<Record<string, CommonValue>>;
+    columnDefinitions: ColumnDefinition[];
     sortingColumns: SortingColumn[];
+    filteringColumns: FilteringColumn[];
+    setFilteringColumnValues: (index: number, values: Set<CommonValue>) => void;
+    addFilteringColumnValue: (index: number, value: CommonValue) => void;
+    removeFilteringColumnValue: (index: number, value: CommonValue) => void;
+    clearFilteringColumnValues: (index: number) => void;
     addSortingColumn: (sortingColumn: SortingColumn) => void;
     clearSortingColumns: () => void;
 }
 
 const dataTableContextInitialData: DataTableContextData = {
+    data: [],
+    columnDefinitions: [],
+    filteringColumns: [],
+    setFilteringColumnValues() {},
+    addFilteringColumnValue() {},
+    removeFilteringColumnValue() {},
+    clearFilteringColumnValues() {},
     sortingColumns: [],
     addSortingColumn: () => {},
     clearSortingColumns: () => {},
@@ -26,4 +29,4 @@ const dataTableContextInitialData: DataTableContextData = {
 
 const DataTableContext = createContext<DataTableContextData>(dataTableContextInitialData);
 
-export { DataTableContext, SORT_ORDERS, type DataTableContextData, type SortingColumn, type SortOrders };
+export { DataTableContext, type DataTableContextData };
