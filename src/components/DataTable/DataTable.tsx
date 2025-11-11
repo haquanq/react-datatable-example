@@ -93,39 +93,40 @@ export const DataTable = ({ data, className, rowActions, columnDefinitions, ...r
         setFilteringColumnValues,
       }}
     >
-      <table
-        className={cn(
-          "divide divide-y divide-gray-200 overflow-hidden rounded-md text-sm outline -outline-offset-1 outline-gray-200",
-          className,
-        )}
-        {...restProps}
-      >
-        <thead className="rounded-t-md bg-gray-100">
-          <DataTableRow>
-            {columnDefinitions.map((v, index) => (
-              <DataTableColumnHeader
-                className={cn("capitalize", v.headerClass)}
-                columnIndex={index}
-                key={"tablehead" + index}
-                columnLabel={v.headerName ?? v.field}
-              />
-            ))}
-            <th className="bg-gray-100"></th>
-          </DataTableRow>
-        </thead>
-        <tbody className="divide divide-y divide-gray-200">
-          {filteredAndSortedData.map((row, index) => (
-            <DataTableRow key={"tablerow" + index}>
+      <div className="w-full overflow-x-scroll rounded-md border border-gray-200">
+        <table
+          className={cn("divide divide-y divide-gray-200 overflow-hidden rounded-md text-sm", className)}
+          {...restProps}
+        >
+          <thead className="rounded-t-md bg-gray-100">
+            <DataTableRow>
               {columnDefinitions.map((v, index) => (
-                <DataTableColumnCell className={v.columnClass} key={"tabledata" + v + index}>
-                  {formatCommonValue(row[v.field])}
-                </DataTableColumnCell>
+                <DataTableColumnHeader
+                  className={cn("capitalize", v.headerClass)}
+                  columnIndex={index}
+                  key={"tablehead" + index}
+                  columnLabel={v.headerName ?? v.field}
+                />
               ))}
-              {rowActions && <DataTableColumnCell className="flex h-full gap-2">{rowActions(row)}</DataTableColumnCell>}
+              <th className="bg-gray-100"></th>
             </DataTableRow>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide divide-y divide-gray-200">
+            {filteredAndSortedData.map((row, index) => (
+              <DataTableRow key={"tablerow" + index}>
+                {columnDefinitions.map((v, index) => (
+                  <DataTableColumnCell className={v.columnClass} key={"tabledata" + v + index}>
+                    {formatCommonValue(row[v.field])}
+                  </DataTableColumnCell>
+                ))}
+                {rowActions && (
+                  <DataTableColumnCell className="flex h-full gap-2">{rowActions(row)}</DataTableColumnCell>
+                )}
+              </DataTableRow>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </DataTableContext.Provider>
   );
 };
