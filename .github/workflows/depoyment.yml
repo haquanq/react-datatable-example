@@ -1,6 +1,7 @@
 name: Deploy to github-pages
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - "src/**"
