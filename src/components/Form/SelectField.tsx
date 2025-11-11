@@ -3,6 +3,7 @@ import { Combobox } from "@base-ui-components/react/combobox";
 import { CheckIcon } from "lucide-react";
 import * as React from "react";
 import { type RegisterOptions, useController, useFormContext } from "react-hook-form";
+import { Input } from "../common/Input";
 
 interface SelectFieldProps {
   label: string;
@@ -37,14 +38,18 @@ export const SelectField = ({ name, label, rules, items, defaultValue }: SelectF
           {label}
         </label>
         <Combobox.Input
-          id={inputId}
-          className={cn(
-            "peer h-10 w-full rounded-md border border-gray-200 bg-white pl-4 text-base font-normal text-gray-900 capitalize transition-colors hover:border-gray-900 focus-visible:border-gray-900",
-            hasError && "border-red-700",
-          )}
-          aria-invalid={hasError}
-          aria-describedby={inputHintId}
+          render={
+            <Input
+              id={inputId}
+              aria-invalid={hasError}
+              aria-describedby={inputHintId}
+              className={cn("capitalize", hasError && "border-red-700")}
+            />
+          }
         />
+        <p className={cn("hidden text-sm", hasError && "block text-red-700")} id={inputHintId}>
+          {errors[name]?.message as string}
+        </p>
       </div>
 
       <Combobox.Portal>
@@ -70,9 +75,6 @@ export const SelectField = ({ name, label, rules, items, defaultValue }: SelectF
           </Combobox.Popup>
         </Combobox.Positioner>
       </Combobox.Portal>
-      <p className={cn("hidden text-sm", hasError && "block text-red-700")} id={inputHintId}>
-        {errors[name]?.message as string}
-      </p>
     </Combobox.Root>
   );
 };

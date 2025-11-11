@@ -1,6 +1,7 @@
 import { cn } from "@/utils/cn";
 import { useId } from "react";
 import { type RegisterOptions, useFormContext } from "react-hook-form";
+import { Input } from "../common/Input";
 
 interface TextFieldProps {
   label: string;
@@ -27,11 +28,8 @@ export const TextField = ({ placeholder, label, name, rules, type = "text", auto
       <label className="text-sm font-medium" htmlFor={inputId}>
         {label}
       </label>
-      <input
-        className={cn(
-          "peer h-10 w-full rounded-md border border-gray-200 px-4 transition-colors hover:border-gray-900 focus-visible:border-gray-900",
-          hasError && "border-red-700",
-        )}
+      <Input
+        className={cn(hasError && "border-red-700")}
         id={inputId}
         type={type}
         aria-invalid={hasError}

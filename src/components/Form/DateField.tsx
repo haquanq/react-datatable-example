@@ -1,6 +1,7 @@
 import { cn } from "@/utils/cn";
 import { useId } from "react";
 import { type RegisterOptions, useController, useFormContext } from "react-hook-form";
+import { Input } from "../common/Input";
 
 interface DateFieldProps {
   label: string;
@@ -32,11 +33,8 @@ export const DateField = ({ label, name, rules, value }: DateFieldProps) => {
       <label className="w-fit text-sm font-medium" htmlFor={inputId}>
         {label}
       </label>
-      <input
-        className={cn(
-          "peer h-10 w-full rounded-md border border-gray-200 px-4 transition-colors hover:border-gray-900 focus-visible:border-gray-900",
-          hasError && "border-red-700",
-        )}
+      <Input
+        className={cn("block", hasError && "border-red-700")}
         id={inputId}
         type="date"
         {...field}
