@@ -29,61 +29,63 @@ export const CandidateAdd = () => {
       }
     >
       <FormControl onSubmit={onSubmit}>
-        <div className="pt-6">
-          <TextField
-            label="Name"
-            name="name"
-            autoComplete="name"
-            rules={{
-              required: "Name is required",
-              minLength: { value: 1, message: "Name must be between 1 and 100 characters" },
-              maxLength: { value: 100, message: "Name must be between 1 and 100 characters" },
-            }}
-          />
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-3">
-            <SelectField
-              name="gender"
-              label="Gender"
-              rules={{ required: "Gender is required" }}
-              items={Object.values(GENDERS)}
-              defaultValue={GENDERS.MALE}
-            />
-            <DateField
-              label="Date of birth"
-              name="dateOfBirth"
-              value={new Date()}
+        <div className="flex flex-col gap-6 pt-4">
+          <div className="flex flex-col gap-3">
+            <TextField
+              label="Name"
+              name="name"
+              autoComplete="name"
               rules={{
-                required: "Date of birth is required",
-                validate: {
-                  notInFuture: (value) => new Date(value) <= new Date() || "Date of birth cannot be in the future",
-                  notTooOld: (value) =>
-                    new Date().getFullYear() - new Date(value).getFullYear() <= 100 || "Age cannot be more than 100",
+                required: "Name is required",
+                minLength: { value: 1, message: "Name must be between 1 and 100 characters" },
+                maxLength: { value: 100, message: "Name must be between 1 and 100 characters" },
+              }}
+            />
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(10rem,1fr))] gap-3">
+              <SelectField
+                name="gender"
+                label="Gender"
+                rules={{ required: "Gender is required" }}
+                items={Object.values(GENDERS)}
+                defaultValue={GENDERS.MALE}
+              />
+              <DateField
+                label="Date of birth"
+                name="dateOfBirth"
+                value={new Date()}
+                rules={{
+                  required: "Date of birth is required",
+                  validate: {
+                    notInFuture: (value) => new Date(value) <= new Date() || "Date of birth cannot be in the future",
+                    notTooOld: (value) =>
+                      new Date().getFullYear() - new Date(value).getFullYear() <= 100 || "Age cannot be more than 100",
+                  },
+                }}
+              />
+            </div>
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
                 },
               }}
             />
+            <TextField
+              label="Address"
+              name="address"
+              autoComplete="street-address"
+              rules={{
+                maxLength: { value: 200, message: "Address cannot be longer than 200 characters" },
+              }}
+            />
           </div>
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            rules={{
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
-              },
-            }}
-          />
-          <TextField
-            label="Address"
-            name="address"
-            autoComplete="street-address"
-            rules={{
-              maxLength: { value: 200, message: "Address cannot be longer than 200 characters" },
-            }}
-          />
-          <div className="flex justify-end gap-3 pt-8">
+          <div className="flex justify-end gap-3">
             <Button type="submit">
               Add
               <PlusIcon size={20} />
